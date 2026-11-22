@@ -21,8 +21,9 @@ const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_U
 app.post('/api/exchange-token', async (req, res) => {
     const { code, redirect_uri } = req.body;
     try {
-        const { tokens } = await oauth2Client.getToken(code, {
-            redirect_uri: redirect_uri || REDIRECT_URI,
+        const { tokens } = await oauth2Client.getToken({
+            code,
+            redirect_uri: 'techodite-xdr://oauth'
         });
         oauth2Client.setCredentials(tokens);
         res.json({ success: true, tokens });
