@@ -19,9 +19,11 @@ if (!REDIRECT_URI) console.error('WARNING: GOOGLE_REDIRECT_URI is not set');
 const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
 app.post('/api/exchange-token', async (req, res) => {
-    const { code } = req.body;
+    const { code, redirect_uri } = req.body;
     try {
-        const { tokens } = await oauth2Client.getToken(code);
+        const { tokens } = await oauth2Client.getToken(code, {
+            redirect_uri: redirect_uri || REDIRECT_URI,
+        });
         oauth2Client.setCredentials(tokens);
         res.json({ success: true, tokens });
     } catch (error) {
